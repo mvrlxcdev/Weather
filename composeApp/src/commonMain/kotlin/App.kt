@@ -13,10 +13,18 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.sp
+import domain.repository.WeatherRepository
+import features.screen.test.TestScreen
+import features.screen.weather.WeatherScreen
+import kotlinx.coroutines.launch
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
+import org.koin.compose.koinInject
 import org.koin.compose.viewmodel.koinViewModel
 import org.koin.core.annotation.KoinExperimentalAPI
+import utils.isLoading
+import utils.onFailure
+import utils.onSuccess
 
 import weather.composeapp.generated.resources.Res
 import weather.composeapp.generated.resources.compose_multiplatform
@@ -24,5 +32,5 @@ import weather.composeapp.generated.resources.compose_multiplatform
 
 @Composable
 fun WeatherApp() {
-
+    WeatherScreen()
 }

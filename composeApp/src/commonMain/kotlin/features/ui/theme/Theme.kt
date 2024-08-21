@@ -5,18 +5,23 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.graphics.Color
 
 private val DarkColorPalette = darkColorScheme(
     primary = DarkPrimary,
     secondary = DarkSecondary,
-    tertiary = DarkTertiary,
+    surface = DarkTertiary,
+    onSurface = Color.Black,
+    background = Color.Black
 
 )
 
 private val LightColorPalette = lightColorScheme(
     primary = LightPrimary,
     secondary = LightSecondary,
-    tertiary = LightTertiary,
+    surface = LightTertiary,
+    onSurface = Color.Black,
+    background = Color.Black,
 )
 
 @Composable
@@ -28,7 +33,8 @@ fun WeatherTheme(
 
     MaterialTheme(
         colorScheme = colorScheme,
-        // typography = Typography,
+        typography = typography,
+        shapes = Shapes
     ) {
         content()
     }

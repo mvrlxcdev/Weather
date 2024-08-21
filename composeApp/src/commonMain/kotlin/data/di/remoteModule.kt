@@ -4,6 +4,8 @@ import io.ktor.client.HttpClient
 import io.ktor.client.plugins.addDefaultResponseValidation
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.defaultRequest
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
 import io.ktor.http.URLProtocol
 import io.ktor.http.path
 import io.ktor.serialization.kotlinx.json.json
@@ -31,6 +33,10 @@ val remoteModule = module {
                         ignoreUnknownKeys = true
                     }
                 )
+            }
+            install(Logging){
+                level = LogLevel.ALL
+                logger.log("api")
             }
         }
     }

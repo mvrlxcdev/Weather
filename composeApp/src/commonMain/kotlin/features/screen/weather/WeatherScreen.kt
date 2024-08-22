@@ -7,17 +7,17 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.layout.wrapContentHeight
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material3.BottomSheetScaffold
-import androidx.compose.material3.Card
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -82,7 +82,7 @@ private fun Content(
     feelsLike: String,
 ) {
     BottomSheetScaffold(
-        sheetPeekHeight = 200.dp,
+        sheetPeekHeight = 180.dp,
         sheetContent = {
             Details(
                 forecastList,
@@ -94,18 +94,18 @@ private fun Content(
 
         ) {
 
-
+        Box(modifier = Modifier.fillMaxSize().background(linearBase))
         Column(
             horizontalAlignment = Alignment.CenterHorizontally,
             modifier = modifier
-                .fillMaxSize()
-                .background(brush = linearBase)
+                .fillMaxWidth().fillMaxHeight(0.7f)
+
 
         ) {
             Row(
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth().padding(top = 24.dp)
+                modifier = Modifier.fillMaxWidth().padding(top = 14.dp).weight(0.1f)
             ) {
                 Icon(
                     Icons.Filled.LocationOn,
@@ -119,57 +119,61 @@ private fun Content(
                     color = Color.White,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-
-                    )
+                    modifier = Modifier.wrapContentHeight()
+                )
             }
             Icon(
                 vectorResource(weatherIcon),
                 contentDescription = condition,
                 tint = Color.White,
-                modifier = Modifier.size(264.dp).padding(24.dp)
+                modifier = Modifier.padding(24.dp).weight(0.25f).size(200.dp)
             )
-            Text(
-                text = condition,
-                style = MaterialTheme.typography.bodyMedium,
-                color = Color.White,
-            )
-            Text(
-                text = temperature.plus("°"),
-                color = Color.White,
-                style = MaterialTheme.typography.bodyLarge,
-                modifier = Modifier.padding(top = 32.dp, bottom = 12.dp)
-            )
-            Row(
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.Center,
-                modifier = Modifier.fillMaxWidth()
+
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                modifier = Modifier.fillMaxSize().weight(0.3f)
             ) {
-                Icon(
-                    vectorResource(Res.drawable.wind_black),
-                    contentDescription = condition,
-                    tint = Color.White,
-                    modifier = Modifier.size(32.dp).padding(end = 5.dp)
-                )
                 Text(
-                    text = windMph.plus(" km/h"),
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color.White,
-                    modifier = Modifier.padding(end = 20.dp)
-                )
-                Icon(
-                    vectorResource(Res.drawable.drop_black),
-                    contentDescription = condition,
-                    tint = Color.White,
-                    modifier = Modifier.size(32.dp).padding(end = 5.dp)
-                )
-                Text(
-                    text = humidity.plus(" %"),
-                    style = MaterialTheme.typography.bodySmall,
+                    text = condition,
+                    style = MaterialTheme.typography.bodyMedium,
                     color = Color.White,
                 )
+                Text(
+                    text = temperature.plus("°"),
+                    color = Color.White,
+                    style = MaterialTheme.typography.bodyLarge,
+                    modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
+                )
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    Icon(
+                        vectorResource(Res.drawable.wind_black),
+                        contentDescription = condition,
+                        tint = Color.White,
+                        modifier = Modifier.size(32.dp).padding(end = 5.dp)
+                    )
+                    Text(
+                        text = windMph.plus(" km/h"),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White,
+                        modifier = Modifier.padding(end = 20.dp)
+                    )
+                    Icon(
+                        vectorResource(Res.drawable.drop_black),
+                        contentDescription = condition,
+                        tint = Color.White,
+                        modifier = Modifier.size(32.dp).padding(end = 5.dp)
+                    )
+                    Text(
+                        text = humidity.plus(" %"),
+                        style = MaterialTheme.typography.bodySmall,
+                        color = Color.White,
+                    )
+                }
             }
-
-
         }
     }
 }

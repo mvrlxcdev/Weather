@@ -137,6 +137,7 @@ private fun Content(
                     text = condition,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White,
+                    modifier = Modifier
                 )
                 Text(
                     text = temperature.plus("°"),

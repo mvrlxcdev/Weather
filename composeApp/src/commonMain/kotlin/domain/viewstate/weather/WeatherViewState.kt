@@ -1,6 +1,8 @@
 package domain.viewstate.weather
 
 import data.model.ForecastInfo
+import data.remote.models.Location
+import data.remote.models.SearchLocations
 import domain.viewstate.ViewState
 import org.jetbrains.compose.resources.DrawableResource
 import weather.composeapp.generated.resources.Res
@@ -25,5 +27,13 @@ data class WeatherViewState(
     val visibility: String = "",
 
     val forecastList: List<ForecastInfo> = emptyList(),
+
+    val searchText: String = "",
+    val countiesList: List<SearchLocations> = emptyList(),
+    val isCountriesListLoading: Boolean = true,
+    val isCountriesListError: Boolean = false,
+    val countiesListError: String = "",
+
+
     val code: Int = 0
 ) : ViewState

@@ -1,4 +1,4 @@
-package features.screen.weather
+package features.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border

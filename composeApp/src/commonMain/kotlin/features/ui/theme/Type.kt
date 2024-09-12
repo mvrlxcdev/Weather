@@ -31,4 +31,14 @@ val typography = Typography(
         fontSize = 18.sp,
         fontWeight = FontWeight.SemiBold
     ),
+    labelMedium = TextStyle(
+        fontFamily = gilroySemibold, // Custom Font
+        fontSize = 24.sp,
+        fontWeight = FontWeight.SemiBold
+    ),
+    labelSmall = TextStyle(
+        fontFamily = gilroySemibold, // Custom Font
+        fontSize = 18.sp,
+        fontWeight = FontWeight.SemiBold
+    ),
 )

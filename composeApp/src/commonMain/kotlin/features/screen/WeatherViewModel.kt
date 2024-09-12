@@ -1,7 +1,8 @@
-package features.screen.weather
+package features.screen
 
 import androidx.lifecycle.viewModelScope
 import data.model.ForecastInfo
+import domain.repository.SettingsRepository
 import domain.repository.WeatherRepository
 import domain.viewstate.ViewEvent
 import domain.viewstate.weather.WeatherViewState
@@ -12,11 +13,13 @@ import utils.getDayOfWeek
 import utils.weatherIcon
 
 class WeatherViewModel(
-    private val weatherRepository: WeatherRepository
+    private val weatherRepository: WeatherRepository,
+    private val settingsRepository: SettingsRepository,
 ) : BaseViewModel<WeatherViewState, WeatherViewEvent>() {
 
     init {
-        getWeatherByCountry("Moscow")
+        getCountry()
+        getWeatherByCountry(currentState.country)
     }
 
     override fun createInitialState(): WeatherViewState = WeatherViewState()
@@ -24,7 +27,21 @@ class WeatherViewModel(
     override fun onTriggerEvent(event: WeatherViewEvent) {
         viewModelScope.launch {
             when (event) {
-                is WeatherViewEvent.ChangeCountry -> {}
+                is WeatherViewEvent.GetLocations -> {
+                    onSearch(event.param)
+                }
+
+                is WeatherViewEvent.SelectCountry -> {
+                    selectCountry(event.param)
+                }
+            }
+        }
+    }
+
+    private fun getCountry() {
+        viewModelScope.launch {
+            settingsRepository.getCountry().collect {
+                setState { currentState.copy(country = it) }
             }
         }
     }
@@ -80,8 +97,49 @@ class WeatherViewModel(
         }
     }
 
+    private suspend fun onSearch(param: String) {
+        setState { currentState.copy(searchText = param) }
+        weatherRepository.fetchLocations(currentState.searchText).collect {
+            when (it) {
+                is ResultState.Loading -> {
+                    setState {
+                        currentState.copy(
+                            isCountriesListLoading = true,
+                            isCountriesListError = false
+                        )
+                    }
+                }
+
+                is ResultState.Failure -> {
+                    setState {
+                        currentState.copy(
+                            isCountriesListError = true,
+                            countiesListError = it.exception.toString(),
+                            isCountriesListLoading = false
+                        )
+                    }
+                }
+
+                is ResultState.Success -> {
+                    setState {
+                        currentState.copy(
+                            countiesList = it.data,
+                            isCountriesListLoading = false,
+                            isCountriesListError = false
+                        )
+                    }
+                }
+            }
+
+        }
+    }
+
+    private suspend fun selectCountry(country: String) {
+        settingsRepository.saveCountry(country)
+    }
 }
 
 sealed class WeatherViewEvent : ViewEvent {
-    class ChangeCountry(val country: String) : WeatherViewEvent()
+    class GetLocations(val param: String) : WeatherViewEvent()
+    class SelectCountry(val param: String) : WeatherViewEvent()
 }

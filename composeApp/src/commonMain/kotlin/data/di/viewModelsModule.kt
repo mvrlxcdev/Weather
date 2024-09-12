@@ -1,7 +1,7 @@
 package data.di
 
 import features.screen.test.TestScreenViewModel
-import features.screen.weather.WeatherViewModel
+import features.screen.WeatherViewModel
 import org.koin.compose.viewmodel.dsl.viewModelOf
 import org.koin.dsl.module
 

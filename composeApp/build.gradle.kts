@@ -17,7 +17,7 @@ kotlin {
             jvmTarget.set(JvmTarget.JVM_11)
         }
     }
-    
+
     listOf(
         iosX64(),
         iosArm64(),
@@ -28,9 +28,9 @@ kotlin {
             isStatic = true
         }
     }
-    
+
     sourceSets {
-        
+
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
@@ -66,6 +66,9 @@ kotlin {
             implementation(libs.koin.compose.viewmodel)
 
             implementation(libs.bundles.ktor)
+
+            api(libs.datastore.preferences)
+            api(libs.datastore)
         }
     }
 }
@@ -109,5 +112,6 @@ android {
 }
 dependencies {
     implementation(libs.androidx.material3.android)
+
 }
 

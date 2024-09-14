@@ -2,6 +2,7 @@ package features.screen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -46,11 +47,24 @@ import weather.composeapp.generated.resources.wind_black
 @OptIn(KoinExperimentalAPI::class)
 @Composable
 fun WeatherScreen(
-    viewModel: WeatherViewModel = koinViewModel<WeatherViewModel>()
+    viewModel: WeatherViewModel = koinViewModel<WeatherViewModel>(),
+    onCountryClick: () -> Unit,
 ) {
     val uiState = viewModel.uiState.collectAsState().value
     if (uiState.isLoading or uiState.isError) {
-        Text(uiState.errorMessage, fontSize = 12.sp)
+        Content(
+            weatherIcon = uiState.icon,
+            country = uiState.country,
+            temperature = uiState.errorMessage,
+            condition = "Error",
+            windMph = "?",
+            humidity = "?",
+            forecastList = uiState.forecastList,
+            uvIndex = uiState.UVIndex,
+            feelsLike = uiState.fellsLike,
+            isError = true,
+            onCountryClick = onCountryClick
+        )
     } else {
         Content(
             weatherIcon = uiState.icon,
@@ -61,7 +75,8 @@ fun WeatherScreen(
             humidity = uiState.humidity,
             forecastList = uiState.forecastList,
             uvIndex = uiState.UVIndex,
-            feelsLike = uiState.fellsLike
+            feelsLike = uiState.fellsLike,
+            onCountryClick = onCountryClick
         )
     }
 }
@@ -80,6 +95,8 @@ private fun Content(
     forecastList: List<ForecastInfo>,
     uvIndex: String,
     feelsLike: String,
+    isError: Boolean = false,
+    onCountryClick: () -> Unit,
 ) {
     BottomSheetScaffold(
         sheetPeekHeight = 180.dp,
@@ -119,7 +136,7 @@ private fun Content(
                     color = Color.White,
                     style = MaterialTheme.typography.titleSmall,
                     fontWeight = FontWeight.Bold,
-                    modifier = Modifier.wrapContentHeight()
+                    modifier = Modifier.wrapContentHeight().clickable { onCountryClick.invoke() }
                 )
             }
             Icon(
@@ -137,12 +154,13 @@ private fun Content(
                     text = condition,
                     style = MaterialTheme.typography.bodyMedium,
                     color = Color.White,
-                    modifier = Modifier
+                    modifier = Modifier,
                 )
                 Text(
                     text = temperature.plus("°"),
                     color = Color.White,
                     style = MaterialTheme.typography.bodyLarge,
+                    fontSize = if (isError) 18.sp else MaterialTheme.typography.bodyLarge.fontSize,
                     modifier = Modifier.padding(top = 24.dp, bottom = 12.dp)
                 )
                 Row(

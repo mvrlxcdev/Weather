@@ -1,5 +1,6 @@
 package features.screen
 
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.viewModelScope
 import data.model.ForecastInfo
 import domain.repository.SettingsRepository
@@ -7,6 +8,7 @@ import domain.repository.WeatherRepository
 import domain.viewstate.ViewEvent
 import domain.viewstate.weather.WeatherViewState
 import features.base.BaseViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import utils.ResultState
 import utils.getDayOfWeek
@@ -19,7 +21,7 @@ class WeatherViewModel(
 
     init {
         getCountry()
-        getWeatherByCountry(currentState.country)
+        getWeatherByCountry()
     }
 
     override fun createInitialState(): WeatherViewState = WeatherViewState()
@@ -40,15 +42,14 @@ class WeatherViewModel(
 
     private fun getCountry() {
         viewModelScope.launch {
-            settingsRepository.getCountry().collect {
-                setState { currentState.copy(country = it) }
-            }
+            val country = settingsRepository.getCountry()
+            setState { currentState.copy(country = country) }
         }
     }
 
-    private fun getWeatherByCountry(country: String) {
+    private fun getWeatherByCountry() {
         viewModelScope.launch {
-            weatherRepository.fetchWeatherForecast(country = country, days = 7).collect {
+            weatherRepository.fetchWeatherForecast(country = settingsRepository.getCountry(), days = 7).collect {
                 when (it) {
                     is ResultState.Loading -> {
                         setState { currentState.copy(isLoading = true) }
@@ -136,6 +137,8 @@ class WeatherViewModel(
 
     private suspend fun selectCountry(country: String) {
         settingsRepository.saveCountry(country)
+        getCountry()
+        getWeatherByCountry()
     }
 }
 

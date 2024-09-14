@@ -6,6 +6,7 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import domain.repository.SettingsRepository
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 
 class SettingsRepositoryImpl(
@@ -16,7 +17,7 @@ class SettingsRepositoryImpl(
         dataStore.edit { pref -> pref[stringPreferencesKey("country")] = country }
     }
 
-    override suspend fun getCountry(): Flow<String> {
-        return dataStore.data.map { it[stringPreferencesKey("country")] ?: "Moscow" }
+    override suspend fun getCountry(): String {
+        return dataStore.data.first()[stringPreferencesKey("country")] ?: "Moscow"
     }
 }

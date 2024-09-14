@@ -6,6 +6,6 @@ interface SettingsRepository {
 
     suspend fun saveCountry(country: String)
 
-    suspend fun getCountry(): Flow<String>
+    suspend fun getCountry(): String
 
 }
